@@ -1,4 +1,5 @@
 from data import courses, semesters, students, professors
+
 from bauhaus import Encoding, proposition, constraint
 from bauhaus.utils import count_solutions, likelihood
 
@@ -9,6 +10,15 @@ config.sat_backend = "kissat"
 # Encoding that will store all of your constraints
 E = Encoding()
 
+class Hashable:
+    def __hash__(self):
+        return hash(str(self))
+
+    def __eq__(self, __value: object) -> bool:
+        return hash(self) == hash(__value)
+
+    def __repr__(self):
+        return str(self)
 
 # region Propositions
 #############################################################################################################
@@ -38,11 +48,13 @@ class FancyPropositions:
 
     def __repr__(self):
         return f"A.{self.data}"
+    
 #############################################################################################################
 # Define your propositions here:
 #############################################################################################################
+
 @proposition(E)
-class Professor_Available:
+class Professor_Available(Hashable):
     def __init__(self, professor, term):
         self.professor = professor
         self.term = term
@@ -158,8 +170,8 @@ z = FancyPropositions("z")
 
 
 
-E.add_constraint(Course_Assigned_Room(course, room, term) >> Course_Offered(course, term))
-E.add_constraint(Course_Assigned_Room(course, room, term) >> Classroom_Free(professor, course, term))
+# E.add_constraint(Course_Assigned_Room(course, room, term) >> Course_Offered(course, term))
+# E.add_constraint(Course_Assigned_Room(course, room, term) >> Classroom_Free(professor, course, term))
 
 
 # Build an example full theory for your setting and return it.
