@@ -19,9 +19,20 @@ PROFS = [
     "Dr. Smith", "Dr. Johnson", "Dr. Williams", "Dr. Jones", "Dr. Brown", "Dr. Davis", "Dr. Miller", "Dr. Wilson",
 ]
 
-PROGRAMS = [
-    "AI", "Bio Med", "Data Analytics", "Game Dev", "Security", "Fundamental", "Cog Sci", "Comp Sci", "Soft Design", "BioMed", "COMA", "Creative Arts"
-]
+PROGRAMS = {
+    "AI": [], 
+    "Bio Med": [], 
+    "Data Analytics": [], 
+    "Game Dev": [], 
+    "Security": [], 
+    "Fundamental": [], 
+    "Cog Sci": [], 
+    "Comp Sci": [], 
+    "Soft Design": [], 
+    "BioMed": [], 
+    "COMA": [], 
+    "Creative Arts": []
+}
 
 COURSES = [
     "Math121", "Math122", "Math123", "Math124", "Math125", "Math126", "Math127", "Math128", "Math129", "Math130",
