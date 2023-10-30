@@ -24,29 +24,29 @@ class Hashable:
 # region EXAMPLES
 #############################################################################################################
 # To create propositions, create classes for them first, annotated with "@proposition" and the Encoding
-@proposition(E)
-class BasicPropositions:
+# @proposition(E)
+# class BasicPropositions:
 
-    def __init__(self, data):
-        self.data = data
+#     def __init__(self, data):
+#         self.data = data
 
-    def __repr__(self):
-        return f"A.{self.data}"
+#     def __repr__(self):
+#         return f"A.{self.data}"
 
 # Different classes for propositions are useful because this allows for more dynamic constraint creation
 # for propositions within that class. For example, you can enforce that "at least one" of the propositions
 # that are instances of this class must be true by using a @constraint decorator.
 # other options include: at most one, exactly one, at most k, and implies all.
 # For a complete module reference, see https://bauhaus.readthedocs.io/en/latest/bauhaus.html
-@constraint.at_least_one(E)
-@proposition(E)
-class FancyPropositions:
+# @constraint.at_least_one(E)
+# @proposition(E)
+# class FancyPropositions:
 
-    def __init__(self, data):
-        self.data = data
+#     def __init__(self, data):
+#         self.data = data
 
-    def __repr__(self):
-        return f"A.{self.data}"
+#     def __repr__(self):
+#         return f"A.{self.data}"
     
 #############################################################################################################  
 # endregion EXAMPLES
@@ -177,12 +177,13 @@ class ClassroomAvailable(Hashable):
 
 
 # Define professor and classroom availability using Professor_Available and Classroom_Available propositions
-prof_avail_props = []
+prof_assigned_props = []
 for professor in PROFS:
     for term in TERMS:
-        for day in DAYS:
-            for time in TIMESLOTS:
-                prof_avail_props.append(ProfessorAssigned(professor, term, day, time))
+        for course in COURSES:
+            for day in DAYS:
+                for time in TIMESLOTS:
+                    prof_assigned_props.append(ProfessorAssigned(professor, course, term, day, time))
 
 room_avail_props = []                
 for room in CLASSROOMS:
@@ -224,46 +225,30 @@ def schedule_programs():
                             
 
     # TODO: Make sure that a course can't be assigned to a classroom that already has a course scheduled at a specific day and time.
-    # Create a dictionary to keep track of classroom assignments
-    classroom_assignments = {}
-    for assignment in course_assigned_props:
-        course = assignment.course
-        room = assignment.room
-        day = assignment.day
-        time = assignment.time
-
-        if room not in classroom_assignments:
-            classroom_assignments[room] = {}
-
-        if day not in classroom_assignments[room]:
-            classroom_assignments[room][day] = {}
-
-        if time not in classroom_assignments[room][day]:
-            classroom_assignments[room][day][time] = []
-
-        classroom_assignments[room][day][time].append(course)
-    # Add constraints to ensure that no two courses are assigned to the same classroom at the same day and time
-    for room, days in classroom_assignments.items():
-        for day, times in days.items():
-            for time, courses in times.items():
-                if len(courses) > 1:
-                    for i in range(len(courses)):
-                        for j in range(i + 1, len(courses)):
-                            E.add_constraint(~courses[i] | ~courses[j])
+    for room in CLASSROOMS:
+        for term in TERMS:
+            for day in DAYS:
+                for time in TIMESLOTS:
+                    # Get all courses assigned to this room at this day and time
+                    courses = [CourseAssigned(course, room, term, day, time) for course in COURSES]
+                    # Add a constraint that at most one of these courses can be true
+                    constraint.add_at_most_one(E, courses)
+                    # E.add_constraint(sum(courses) <= 1)
 
 
-    # TODO: Make sure that there are at least 2 lectures per course
+    # Ensure that there are at least 2 lectures per course
     for course in COURSES:
         for term in TERMS: 
-            lectures = [CourseAssigned(course, _, term, _, _).var for _ in DAYS for _ in TIMESLOTS]
-            E.add_constraint(sum(lectures) >= 2)
+            lectures = [CourseAssigned(course, room, term, day, time) for room in CLASSROOMS for day in DAYS for time in TIMESLOTS]
+            constraint.add_at_least_one(E, lectures)
+            # E.add_constraint(sum(lectures) >= 2)
 
 
     # TODO: Make sure that a professor is not assigned to more than once place at the same time
     professor_assignments = {}
     for professor in PROFS:
         professor_assignments[professor] = []
-    for assignment in prof_avail_props:
+    for assignment in prof_assigned_props:
         professor = assignment.professor
         day = assignment.day
         time = assignment.time
@@ -288,15 +273,18 @@ def schedule_programs():
                             E.add_constraint(~(ProfessorAssigned(professor, course, term, day, time)))
 
 
-    # TODO: Make sure that all required Courses for the Year Are Scheduled 
+    # Ensure that all required Courses for the Year Are Scheduled 
     for program, year_reqs in PROGRAMS.items():
-        for year, req_course in year_reqs.items():
-            for course in req_course:
-                for term in TERMS:
-                    if course not in COURSES:
-                        # If the required course is not in the list of all courses,
-                        # then ensure that it is not scheduled in that term.
-                         E.add_constraint(~(CourseAssigned(course, _, term, _, _).var for _ in DAYS for _ in TIMESLOTS))
+        for year, req_courses in year_reqs.items():
+            for course in req_courses:
+                if course in COURSES:
+                    # If the required course is in the list of all courses,
+                    # then ensure that it is scheduled in that term.
+                    for term in TERMS:
+                        for room in CLASSROOMS:
+                            for day in DAYS:
+                                for time in TIMESLOTS:
+                                    E.add_constraint(CourseAssigned(course, room, term, day, time))
 
 
     return E
@@ -308,6 +296,9 @@ if __name__ == "__main__":
     T = schedule_programs()
     T = T.compile()
     print("\nSatisfiable: %s" % T.satisfiable())
-    print("# Solutions: %d" % count_solutions(T))
+    print("VARS: ", len(T.vars()))
+    print("OPs: ", T.size())
+    # print("# Solutions: %d" % count_solutions(T))
     print("   Solution: %s" % T.solve())
+    
 # endregion Compile + Run

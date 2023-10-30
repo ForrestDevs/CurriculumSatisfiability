@@ -36,8 +36,24 @@ COURSES = [
 ]
 # Dict of all the Courses with the prerequisites required
 COURSE_REQS = {
-    "CISC121": [],
-    "CISC124": ["CISC121"]
+    "C1": [],
+    "C2": ["C1"],
+    "C3": ["C1", "C2"],
+    "C4": [],
+    "C5": ["C3"],
+    "C6": [], 
+    "C7": ["C5", "C6"],
+    "C8": ["C4"],
+    "C9": ["C7", "C8"],
+    "C10": ["C9"],
+    "C11": ["C10"],
+    "C12": ["C11"],
+    "C13": ["C12"],
+    "C14": ["C13"],
+    "C15": ["C14"],
+    "C16": ["C15"],
+    
+    
 }
 # Nested Dict of All the Programs, with the requirements broken down by Year 
 PROGRAMS = {
