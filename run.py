@@ -163,6 +163,8 @@ course_prerequisite_props = []
 for course, prerequisites in COURSE_REQS.items():
     for prerequisite in prerequisites:
         course_prerequisite_props.append(CoursePrerequisite(course, prerequisite))
+
+
 #############################################################################################################
 # Program Props:
 #############################################################################################################
@@ -205,6 +207,7 @@ def schedule_programs():
     #############################################################################################################
     # Ensure that a professor isn't assigned to teach two courses at the same time
     [constraint.add_at_most_one(E, assignments) for assignments in assignments_by_time.values()]
+
     # Ensure that Profs can only teach courses for which they're qualified
     for professor in PROFS: 
         for course in COURSES:
@@ -215,6 +218,8 @@ def schedule_programs():
                         # then ensure that the professor is not assigned to teach that course.
                         if not ProfessorQualified(professor, course) in professor_qualified_props:
                             E.add_constraint(~ProfessorAssigned(professor, course, term, day, time))
+    
+                          
     #############################################################################################################
     print("Adding course constraints...")
     # Course Constraints:
@@ -225,44 +230,49 @@ def schedule_programs():
     
 
     # Ensure that prerequisites are scheduled in a term before the course that requires them
-    # for prop in course_prerequisite_props:
-    #     course = prop.course
-    #     prerequisite = prop.prerequisite
-    #     for i in range(len(TERMS) - 1):  # We subtract 1 because we're looking ahead by 1 term
-    #         current_term = TERMS[i]
-    #         next_term = TERMS[i + 1]
-    #         for room in CLASSROOMS:
-    #             for day in DAYS:
-    #                 for time in TIMESLOTS:
-    #                     # Ensure that the prerequisite course is offered in the current term
-    #                     prereq_in_current_term = CourseAssigned(prerequisite, room, current_term, day, time)
-    #                     # And the course that requires it is offered in the next term
-    #                     course_in_next_term = CourseAssigned(course, room, next_term, day, time)
-    #                     E.add_constraint(prereq_in_current_term & course_in_next_term)
+    for prop in course_prerequisite_props:
+        course = prop.course
+        prerequisite = prop.prerequisite
+        for i in range(len(TERMS) - 1):  # We subtract 1 because we're looking ahead by 1 term
+
+            current_term = TERMS[i]
+            next_term = TERMS[i + 1]
+        
+            for room in CLASSROOMS:
+                for day in DAYS:
+                    for time in TIMESLOTS:
+                        # Ensure that the prerequisite course is offered in the current term
+                        prereq_in_current_term = CourseAssigned(prerequisite, room, current_term, day, time)
+                        # And the course that requires it is offered in the next term
+                        course_in_next_term = CourseAssigned(course, room, next_term, day, time)
+                        E.add_constraint(prereq_in_current_term & course_in_next_term)
+
+
     # Ensure that there are at least 2 lectures per course
-    # for course in COURSES:
-    #     for term in TERMS: 
-    #         # Create a dictionary to store the lectures for each time slot
-    #         lectures_by_timeslot = {(day, time): [] for day in DAYS for time in TIMESLOTS}
-    #         # Add each lecture to the list for its time slot
-    #         for room in CLASSROOMS:
-    #             for day in DAYS:
-    #                 for time in TIMESLOTS:
-    #                     lecture = CourseAssigned(course, room, term, day, time)
-    #                     lectures_by_timeslot[(day, time)].append(lecture)
-    #         # Ensure that no more than one lecture is scheduled at the same time
-    #         for lectures in lectures_by_timeslot.values():
-    #             constraint.add_at_most_one(E, lectures)
-    #         # Ensure that at least 2 lectures are scheduled
-    #         for timeslot1, timeslot2 in combinations(lectures_by_timeslot.keys(), 2):
-    #             lectures1 = lectures_by_timeslot[timeslot1]
-    #             lectures2 = lectures_by_timeslot[timeslot2]
-    #             constraint.add_at_least_one(E, lectures1 + lectures2)
+    for course in COURSES:
+        for term in TERMS: 
+            # Create a dictionary to store the lectures for each time slot
+            lectures_by_timeslot = {(day, time): [] for day in DAYS for time in TIMESLOTS}
+            # Add each lecture to the list for its time slot
+            for room in CLASSROOMS:
+                for day in DAYS:
+                    for time in TIMESLOTS:
+                        lecture = CourseAssigned(course, room, term, day, time)
+                        lectures_by_timeslot[(day, time)].append(lecture)
+            # Ensure that no more than one lecture is scheduled at the same time
+            for lectures in lectures_by_timeslot.values():
+                constraint.add_at_most_one(E, lectures)
+            # Ensure that at least 2 lectures are scheduled
+            for timeslot1, timeslot2 in combinations(lectures_by_timeslot.keys(), 2):
+                lectures1 = lectures_by_timeslot[timeslot1]
+                lectures2 = lectures_by_timeslot[timeslot2]
+                constraint.add_at_least_one(E, lectures1 + lectures2)
    
    #############################################################################################################
     print("Adding program constraints...")
     # Program Constraints:
     #############################################################################################################
+
     # Ensure that a course is only scheduled in terms that correspond to the year it's required in
     for prop in program_req_course_props:
         # Get the year from the proposition
@@ -340,7 +350,6 @@ def display_solution(solution):
 
     # Display the table
     print(tabulate(table_data, headers=["Course", "Term", "Day", "Time"]))
-
 
 if __name__ == "__main__":
     print("Building theory...")
