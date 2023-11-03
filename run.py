@@ -22,8 +22,6 @@ class Hashable:
     def __repr__(self):
         return str(self)
 # endregion SETUP
-
-
 # region Propositions
 #############################################################################################################
 # Professor Props:
@@ -218,8 +216,8 @@ def schedule_programs():
                         # then ensure that the professor is not assigned to teach that course.
                         if not ProfessorQualified(professor, course) in professor_qualified_props:
                             E.add_constraint(~ProfessorAssigned(professor, course, term, day, time))
-    
-                          
+
+
     #############################################################################################################
     print("Adding course constraints...")
     # Course Constraints:
