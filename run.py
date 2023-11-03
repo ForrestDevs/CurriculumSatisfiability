@@ -161,8 +161,6 @@ course_prerequisite_props = []
 for course, prerequisites in COURSE_REQS.items():
     for prerequisite in prerequisites:
         course_prerequisite_props.append(CoursePrerequisite(course, prerequisite))
-
-
 #############################################################################################################
 # Program Props:
 #############################################################################################################
@@ -172,7 +170,6 @@ for program, years in PROGRAMS.items():
     for year, courses in years.items():
         for course in courses:
             program_req_course_props.append(ProgramReqCourse(course, program, year))
-
 # TODO: Intialize the props for program prerequisite sharing
 program_shares_prereq_props = []
 for program1, program2 in combinations(PROGRAMS.keys(), 2):
@@ -216,8 +213,6 @@ def schedule_programs():
                         # then ensure that the professor is not assigned to teach that course.
                         if not ProfessorQualified(professor, course) in professor_qualified_props:
                             E.add_constraint(~ProfessorAssigned(professor, course, term, day, time))
-
-
     #############################################################################################################
     print("Adding course constraints...")
     # Course Constraints:
@@ -225,8 +220,6 @@ def schedule_programs():
     
     # TODO: When adding the following constraints, It severly filiters down the number of solutions
     #  to the point where if there isnt substantial data then it will not find a solution
-    
-
     # Ensure that prerequisites are scheduled in a term before the course that requires them
     for prop in course_prerequisite_props:
         course = prop.course
@@ -244,8 +237,6 @@ def schedule_programs():
                         # And the course that requires it is offered in the next term
                         course_in_next_term = CourseAssigned(course, room, next_term, day, time)
                         E.add_constraint(prereq_in_current_term & course_in_next_term)
-
-
     # Ensure that there are at least 2 lectures per course
     for course in COURSES:
         for term in TERMS: 
@@ -328,6 +319,12 @@ def schedule_programs():
 
 
 # region Compile + Run
+
+# Idea for displaying the solution:
+#  I could break the solution down by program, and show that the courses required for each program are scheduled in the correct terms
+#  I could also show that the prerequisites are scheduled in the correct terms
+#  I could also show that the courses are scheduled in the correct terms
+
 def display_solution(solution):
     # Filter out the propositions that are true in the solution
     true_props = [prop for prop, value in solution.items() if value]
