@@ -316,8 +316,6 @@ def schedule_programs():
 # endregion Add Constraints + Build Theory
 
 
-
-
 # region Compile + Run
 
 # Idea for displaying the solution:
