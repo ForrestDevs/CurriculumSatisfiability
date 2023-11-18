@@ -61,6 +61,8 @@ class CourseAssigned(Hashable):
     def __repr__(self) -> str:
         return f"CourseAssigned(course={self.course}, room={self.room}, term={self.term}, day={self.day}, time={self.time})"
 
+# NOTE : IF a course is 6 credits then it will be scheduled for both term 1 and term 2. Add this to constraints
+
 @proposition(E)
 class CoursePrerequisite(Hashable):
     def __init__(self, course, prerequisite) -> None:
@@ -115,6 +117,7 @@ class ClassroomAssigned(Hashable):
     def __repr__(self) -> str:
         return f"ClassroomAssigned(room={self.room}, course={self.course}, term={self.term}, day={self.day}, time={self.time})"
 # endregion
+
 
 
 # region INIT Props
