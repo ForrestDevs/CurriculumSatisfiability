@@ -1,17 +1,15 @@
-# region SETUP
-# Import necessary modules
 from data import *
 from tabulate import tabulate
+from tqdm import tqdm
 from itertools import combinations
 from collections import defaultdict
 from bauhaus import Encoding, proposition, constraint
 from bauhaus.utils import count_solutions, likelihood
-# These two lines make sure a faster SAT solver is used.
 from nnf import config
 config.sat_backend = "kissat"
-# Encoding that will store all of your constraints
+
 E = Encoding()
-# A base class to implement hashable
+
 class Hashable:
     def __hash__(self):
         return hash(str(self))
@@ -21,11 +19,10 @@ class Hashable:
 
     def __repr__(self):
         return str(self)
-# endregion SETUP
+
 # region Propositions
-#############################################################################################################
+
 # Professor Props:
-#############################################################################################################
 @proposition(E)
 class ProfessorAssigned(Hashable):
     def __init__(self, professor, course, term, day, time) -> None:
@@ -46,9 +43,8 @@ class ProfessorQualified(Hashable):
 
     def __repr__(self) -> str:
         return f"ProfessorQualifiedForCourse(professor={self.professor}, course={self.course})"
-#############################################################################################################
+
 # Course Props:
-#############################################################################################################
 @proposition(E)
 class CourseAssigned(Hashable):
     def __init__(self, course, room, term, day, time) -> None:
@@ -63,6 +59,7 @@ class CourseAssigned(Hashable):
 
 # NOTE : IF a course is 6 credits then it will be scheduled for both term 1 and term 2. Add this to constraints
 
+
 @proposition(E)
 class CoursePrerequisite(Hashable):
     def __init__(self, course, prerequisite) -> None:
@@ -71,9 +68,8 @@ class CoursePrerequisite(Hashable):
 
     def __repr__(self) -> str:
         return f"Course_Prerequisite(course={self.course}, prerequisite={self.prerequisite})"
-#############################################################################################################
+
 # Program Props:
-#############################################################################################################
 @proposition(E)
 class ProgramReqCourse:
     def __init__(self, course, program, year):
@@ -102,9 +98,8 @@ class ProgramCanComplete:
         
     def __repr__(self):
         return f"Program_Can_Complete(program={self.program}, term={self.term})"
-#############################################################################################################
+
 # Classroom Props:
-#############################################################################################################
 @proposition(E)
 class ClassroomAssigned(Hashable):
     def __init__(self, room, course, term, day, time) -> None:
@@ -124,35 +119,35 @@ class ClassroomAssigned(Hashable):
 #############################################################################################################
 # Professor Props:
 #############################################################################################################
-# Initialize a dictionary to store the assignments of each professor
-professor_assignments = {professor: set() for professor in PROFS}
+# # Initialize a dictionary to store the assignments of each professor
+# professor_assignments = {professor: set() for professor in PROFS}
 
-# Initialize the props for professor qualifications
-professor_qualified_props = []
-for professor, courses in PROFS_QUAL.items():
-    for course in courses:
-        professor_qualified_props.append(ProfessorQualified(professor, course))
+# # Initialize the props for professor qualifications
+# professor_qualified_props = []
+# for professor, courses in PROFS_QUAL.items():
+#     for course in courses:
+#         professor_qualified_props.append(ProfessorQualified(professor, course))
 
-# Define professor assignments using ProfessorAssigned propositions
-prof_assigned_props = []
-for professor in PROFS:
-    for term in TERMS:
-        for course in COURSES:
-            for day in DAYS:
-                for time in TIMESLOTS:
-                    prof_assigned_props.append(ProfessorAssigned(professor, course, term, day, time))
+# # Define professor assignments using ProfessorAssigned propositions
+# prof_assigned_props = []
+# for professor in PROFS:
+#     for term in TERMS:
+#         for course in COURSES:
+#             for day in DAYS:
+#                 for time in TIMESLOTS:
+#                     prof_assigned_props.append(ProfessorAssigned(professor, course, term, day, time))
 
-# Group the ProfessorAssigned propositions by professor, term, day, and time
-assignments_by_time = defaultdict(list)
-for assignment in prof_assigned_props:
-    key = (assignment.professor, assignment.term, assignment.day, assignment.time)
-    assignments_by_time[key].append(assignment)
+# # Group the ProfessorAssigned propositions by professor, term, day, and time
+# assignments_by_time = defaultdict(list)
+# for assignment in prof_assigned_props:
+#     key = (assignment.professor, assignment.term, assignment.day, assignment.time)
+#     assignments_by_time[key].append(assignment)
 #############################################################################################################
 # Course Props:
 #############################################################################################################
 # Define course scheduling using CourseAssigned propositions
 course_assigned_props = []
-for course in COURSES:
+for course in COURSE_REQS.keys():
     for term in TERMS:
         for room in CLASSROOMS:
             for day in DAYS:
@@ -176,7 +171,7 @@ for program, years in PROGRAMS.items():
 # TODO: Intialize the props for program prerequisite sharing
 program_shares_prereq_props = []
 for program1, program2 in combinations(PROGRAMS.keys(), 2):
-    for course in COURSES:
+    for course in COURSE_REQS.keys():
         program_shares_prereq_props.append(ProgramSharesPreReq(program1, program2, course))
 #############################################################################################################
 # Classroom Props:
@@ -185,7 +180,7 @@ for program1, program2 in combinations(PROGRAMS.keys(), 2):
 classroom_assigned_props = []
 for room in CLASSROOMS:
     for term in TERMS:
-        for course in COURSES:
+        for course in COURSE_REQS.keys():
             for day in DAYS:
                 for time in TIMESLOTS:
                     classroom_assigned_props.append(ClassroomAssigned(room, course, term, day, time))
@@ -204,27 +199,27 @@ def schedule_programs():
     # Professor Constraints:
     #############################################################################################################
     # Ensure that a professor isn't assigned to teach two courses at the same time
-    [constraint.add_at_most_one(E, assignments) for assignments in assignments_by_time.values()]
+    # [constraint.add_at_most_one(E, assignments) for assignments in assignments_by_time.values()]
 
     # Ensure that Profs can only teach courses for which they're qualified
-    for professor in PROFS: 
-        for course in COURSES:
-            for term in TERMS:
-                for day in DAYS:
-                    for time in TIMESLOTS:
-                        # If the professor is not qualified to teach the course,
-                        # then ensure that the professor is not assigned to teach that course.
-                        if not ProfessorQualified(professor, course) in professor_qualified_props:
-                            E.add_constraint(~ProfessorAssigned(professor, course, term, day, time))
-    #############################################################################################################
-    print("Adding course constraints...")
-    # Course Constraints:
-    #############################################################################################################
+    # for professor in PROFS: 
+    #     for course in COURSES:
+    #         for term in TERMS:
+    #             for day in DAYS:
+    #                 for time in TIMESLOTS:
+    #                     # If the professor is not qualified to teach the course,
+    #                     # then ensure that the professor is not assigned to teach that course.
+    #                     if not ProfessorQualified(professor, course) in professor_qualified_props:
+    #                         E.add_constraint(~ProfessorAssigned(professor, course, term, day, time))
+    # #############################################################################################################
+    # print("Adding course constraints...")
+    # # Course Constraints:
+    # #############################################################################################################
     
     # TODO: When adding the following constraints, It severly filiters down the number of solutions
     #  to the point where if there isnt substantial data then it will not find a solution
     # Ensure that prerequisites are scheduled in a term before the course that requires them
-    for prop in course_prerequisite_props:
+    for prop in tqdm(course_prerequisite_props, desc="Adding course constraints (1/2)"):
         course = prop.course
         prerequisite = prop.prerequisite
         for i in range(len(TERMS) - 1):  # We subtract 1 because we're looking ahead by 1 term
@@ -241,10 +236,11 @@ def schedule_programs():
                         course_in_next_term = CourseAssigned(course, room, next_term, day, time)
                         E.add_constraint(prereq_in_current_term & course_in_next_term)
     # Ensure that there are at least 2 lectures per course
-    for course in COURSES:
+    for course in tqdm(COURSE_REQS.keys(), desc="Adding course constraints (2/2)"):
+        lectures_by_timeslot = {(day, time): [] for day in DAYS for time in TIMESLOTS}
+       
         for term in TERMS: 
             # Create a dictionary to store the lectures for each time slot
-            lectures_by_timeslot = {(day, time): [] for day in DAYS for time in TIMESLOTS}
             # Add each lecture to the list for its time slot
             for room in CLASSROOMS:
                 for day in DAYS:
@@ -254,19 +250,14 @@ def schedule_programs():
             # Ensure that no more than one lecture is scheduled at the same time
             for lectures in lectures_by_timeslot.values():
                 constraint.add_at_most_one(E, lectures)
+                
             # Ensure that at least 2 lectures are scheduled
-            for timeslot1, timeslot2 in combinations(lectures_by_timeslot.keys(), 2):
-                lectures1 = lectures_by_timeslot[timeslot1]
-                lectures2 = lectures_by_timeslot[timeslot2]
-                constraint.add_at_least_one(E, lectures1 + lectures2)
-   
-   #############################################################################################################
-    print("Adding program constraints...")
-    # Program Constraints:
-    #############################################################################################################
+            for timeslot, lectures in lectures_by_timeslot.items():
+                    if len(lectures) > 1:
+                        constraint.add_at_least_one(E, lectures)
 
     # Ensure that a course is only scheduled in terms that correspond to the year it's required in
-    for prop in program_req_course_props:
+    for prop in tqdm(program_req_course_props, desc="Adding program constraints"):
         # Get the year from the proposition
         year = prop.year
         # Convert the year to an integer (assuming it's a string like 'Year1', 'Year2', etc.)
@@ -310,7 +301,7 @@ def schedule_programs():
                 for time in TIMESLOTS:
                     #  For each combination of room, term, day, and time, create a list of CourseAssigned propositions
                     # Each proposition represents a course being assigned to the current room at the current term, day, and time
-                    courses = [CourseAssigned(course, room, term, day, time) for course in COURSES]
+                    courses = [CourseAssigned(course, room, term, day, time) for course in COURSE_REQS.keys()]
                     # Add a constraint that at most one of these propositions can be true
                     # This ensures that at most one course can be assigned to the current room at the current term, day, and time
                     constraint.add_at_most_one(E, courses)
