@@ -167,28 +167,58 @@ def schedule_programs():
 
                     E.add_constraint(prereq_in_current_term & course_in_next_term)
 
-    # Ensure that courses with 6 credits are scheduled for both term 1 and term 2
-    for key, value in tqdm(COURSES.items(), desc="Adding course constraints (2/3)"):
-        if value['credits'] == 6:  # Check if the course has 6 credits
-            assignments_T1 = [CourseAssigned(key, room, "T-1", day, time) for room, day, time in product(CLASSROOMS, DAYS, TIMESLOTS)]
-            # Create a list of CourseAssigned propositions for term "T-2"
-            assignments_T2 = [CourseAssigned(key, room, "T-2", day, time) for room, day, time in product(CLASSROOMS, DAYS, TIMESLOTS)]
-            # Add a constraint that at least one proposition from each list is true
-            constraint.add_at_least_one(E, assignments_T1)
-            constraint.add_at_least_one(E, assignments_T2)
+    # # Ensure that courses with 6 credits are scheduled for both term 1 and term 2
+    # for key, value in tqdm(COURSES.items(), desc="Adding course constraints (2/3)"):
+    #     if value['credits'] == 6:  # Check if the course has 6 credits
+    #         assignments_T1 = [CourseAssigned(key, room, "T-1", day, time) for room, day, time in product(CLASSROOMS, DAYS, TIMESLOTS)]
+    #         # Create a list of CourseAssigned propositions for term "T-2"
+    #         assignments_T2 = [CourseAssigned(key, room, "T-2", day, time) for room, day, time in product(CLASSROOMS, DAYS, TIMESLOTS)]
+    #         # Add a constraint that at least one proposition from each list is true
+    #         constraint.add_at_least_one(E, assignments_T1)
+    #         constraint.add_at_least_one(E, assignments_T2)
     
     # Ensure that there are 2 lectures per course
     for course in tqdm(COURSES.keys(), desc="Adding course constraints (3/3)"):
         for term in TERMS:
-            # Create a list of all possible CourseAssigned propositions for this course and term
+              # Create a list of all possible CourseAssigned propositions for this course and term
             assignments = [CourseAssigned(course, room, term, day, time) for room, day, time in product(CLASSROOMS, DAYS, TIMESLOTS)]
-            # Create a list of all possible combinations of 2 assignments
-            assignment_pairs = list(combinations(assignments, 2))
-            # Create a list of constraints, each indicating that at most one assignment in a pair can be true
-            constraints = [Or(~assignment1, ~assignment2) for assignment1, assignment2 in assignment_pairs]
-            # Add all constraints to the encoding
-            for constraintF in constraints:
-                E.add_constraint(constraintF)
+
+            # Add a constraint that at most two of these propositions are true
+            constraint.at_most_k(assignments, 2)
+
+            # Generate all combinations of pairs from assignments
+            pair_combinations = list(combinations(assignments, 2))
+
+            # Create a new list where each element is a conjunction of a pair of assignments
+            pair_constraints = [E.add_constraint(pair[0] & pair[1]) for pair in pair_combinations]
+
+            # Add a constraint that exactly one of these pair constraints is true
+            constraint.add_exactly_one(E, pair_constraints)
+
+            # # Create a list of all possible CourseAssigned propositions for this course and term
+            # assignments = [CourseAssigned(course, room, term, day, time) for room, day, time in product(CLASSROOMS, DAYS, TIMESLOTS)]
+
+            # # Add a constraint that at most two of these propositions are true
+            # constraint.at_most_k(E, assignments, 2)
+
+            # # Create and add a constraint that at least two of these propositions are true
+            # # We create combinations of all propositions and ensure that at least one combination is true
+            # at_least_two = [E.add_constraint(assignments[i] & assignments[j]) for i, j in combinations(range(len(assignments)), 2)]
+            # E.add_constraint(sum(at_least_two) >= 1)
+            # constraint.add_exactly_one
+            # # Create a list of all possible CourseAssigned propositions for this course and term
+            # assignments = [CourseAssigned(course, room, term, day, time) for room, day, time in product(CLASSROOMS, DAYS, TIMESLOTS)]
+            
+            # constraint.at_most_k(E, assignments, 2)
+            # E.add_constraint()
+            
+            # # Create a list of all possible combinations of 2 assignments
+            # assignment_pairs = list(combinations(assignments, 2))
+            # # Create a list of constraints, each indicating that at most one assignment in a pair can be true
+            # constraints = [Or(~assignment1, ~assignment2) for assignment1, assignment2 in assignment_pairs]
+            # # Add all constraints to the encoding
+            # for constraintF in constraints:
+            #     E.add_constraint(constraintF)
 
     # for course in tqdm(COURSES.keys(), desc="Adding course constraints (3/3)"):
     #     for term in TERMS:
@@ -237,8 +267,7 @@ def display_solution(solution):
     true_props = [prop for prop, value in solution.items() if value]
 
     # print(true_props)
-
-
+    
     # Sort the propositions by term, day, and time
     sorted_props = sorted(true_props, key=lambda prop: (TERMS.index(prop.term), DAYS.index(prop.day), TIMESLOTS.index(prop.time)))
 
