@@ -6,7 +6,7 @@ from collections import defaultdict
 from bauhaus import Encoding, proposition, constraint, Or, And
 from bauhaus.utils import count_solutions, likelihood
 
-from nnf import config
+from nnf import config, Var
 config.sat_backend = "kissat"
 
 E = Encoding()
@@ -21,40 +21,19 @@ class Hashable:
     def __repr__(self):
         return str(self)
 
-# Professor Props:
-# @proposition(E)
-# class ProfessorAssigned(Hashable):
-#     def __init__(self, professor, course, term, day, time) -> None:
-#         self.professor = professor
-#         self.course = course
-#         self.term = term
-#         self.day = day
-#         self.time = time
-
-#     def __repr__(self) -> str:
-#         return f"Professor_Assigned(professor={self.professor}, course={self.course}, term={self.term}, day={self.day}, time={self.time})"
-
-# @proposition(E)
-# class ProfessorQualified(Hashable): 
-#     def __init__(self, professor, course)-> None:
-#         self.professor = professor
-#         self.course = course
-
-#     def __repr__(self) -> str:
-#         return f"ProfessorQualifiedForCourse(professor={self.professor}, course={self.course})"
-
 # Course Props:
 @proposition(E)
 class CourseAssigned(Hashable):
-    def __init__(self, course, room, term, day, time) -> None:
+    def __init__(self, course, room, term, day, time, var) -> None:
         self.course = course
         self.room = room
         self.term = term
         self.day = day
         self.time = time
+        self.var = var
 
     def __repr__(self) -> str:
-        return f"CourseAssigned(course={self.course}, room={self.room}, term={self.term}, day={self.day}, time={self.time})"
+        return f"CourseAssigned(course={self.course}, room={self.room}, term={self.term}, day={self.day}, time={self.time}, var={self.var})"
 
 @proposition(E)
 class CoursePrerequisite(Hashable):
@@ -65,85 +44,19 @@ class CoursePrerequisite(Hashable):
     def __repr__(self) -> str:
         return f"Course_Prerequisite(course={self.course}, prerequisite={self.prerequisite})"
 
-# Program Props:
-# @proposition(E)
-# class ProgramReqCourse:
-#     def __init__(self, course, program, year):
-#         self.course = course
-#         self.program = program
-#         self.year = year
+# Create the variables
+variables = {(course, term, room, day, time): Var(f"{course}_{term}_{room}_{day}_{time}") for course, term, room, day, time in product(COURSES.keys(), TERMS, CLASSROOMS, DAYS, TIMESLOTS)}
 
-#     def __repr__(self):
-#         return f"Program_Req_Course(course={self.course}, program={self.program}, year={self.year})"
-
-# @proposition(E)
-# class ProgramSharesPreReq:
-#     def __init__(self, program1, program2, course):
-#         self.program1 = program1
-#         self.program2 = program2
-#         self.course = course
-
-#     def __repr__(self):
-#         return f"Program_Shares_PreReq(program1={self.program1}, program2={self.program2}, course={self.course})"
-
-# @proposition(E)
-# class ProgramCanComplete:
-#     def __init__(self, program, term):
-#         self.program = program
-#         self.term = term
-        
-#     def __repr__(self):
-#         return f"Program_Can_Complete(program={self.program}, term={self.term})"
-
-
-# Classroom Props:
-# @proposition(E)
-# class ClassroomAssigned(Hashable):
-#     def __init__(self, room, course, term, day, time) -> None:
-#         self.room = room
-#         self.course = course
-#         self.term = term
-#         self.day = day
-#         self.time = time
-
-#     def __repr__(self) -> str:
-#         return f"ClassroomAssigned(room={self.room}, course={self.course}, term={self.term}, day={self.day}, time={self.time})"
-
-# Define course scheduling using CourseAssigned propositions
-course_assigned_props = []
-for course, term, room, day, time in tqdm(product(COURSES.keys(), TERMS, CLASSROOMS, DAYS, TIMESLOTS), desc="Adding course assigned propositions"):
-    course_assigned_props.append(CourseAssigned(course, room, term, day, time))
+# Create the CourseAssigned propositions with the corresponding variables
+course_assigned_props = [CourseAssigned(course, room, term, day, time, variables[(course, term, room, day, time)]) for course, term, room, day, time in product(COURSES.keys(), TERMS, CLASSROOMS, DAYS, TIMESLOTS)]
 
 # Define course prerequisites using CoursePrerequisite propositions
 course_prerequisite_props = []
 for course, value in tqdm(COURSES.items(), desc="Adding course prerequisite propositions"):
-    print(course, value)
-    if value['reqs']:
+    if len(value['reqs']) > 0:
         print("REQS: ", value['reqs'])
         for prerequisite in value['reqs']:
-            if prerequisite:
                 course_prerequisite_props.append(CoursePrerequisite(course, prerequisite))
-
-# Program Props:
-# program_req_course_props = []
-# for program, years in PROGRAMS.items():
-#     for year, courses in years.items():
-#         for course in courses:
-#             program_req_course_props.append(ProgramReqCourse(course, program, year))
-
-# program_shares_prereq_props = []
-# for program1, program2 in combinations(PROGRAMS.keys(), 2):
-    # for course in COURSE_REQS.keys():
-    #     program_shares_prereq_props.append(ProgramSharesPreReq(program1, program2, course))
-
-# Classroom Props:
-# classroom_assigned_props = []
-# for room in CLASSROOMS:
-#     for term in TERMS:
-#         for course in COURSE_REQS.keys():
-#             for day in DAYS:
-#                 for time in TIMESLOTS:
-#                     classroom_assigned_props.append(ClassroomAssigned(room, course, term, day, time))
 
 def schedule_programs():
     # Ensure that prerequisites are scheduled in a term before the course that requires them (IFF the course is the same level as the course that requires it)
@@ -161,9 +74,8 @@ def schedule_programs():
                 
                 for room, day, time in product(CLASSROOMS, DAYS, TIMESLOTS):
                     # Ensure that the prerequisite course is offered in the current term
-                    prereq_in_current_term = CourseAssigned(prerequisite, room, current_term, day, time)
-                    # And the course that requires it is offered in the next term
-                    course_in_next_term = CourseAssigned(course, room, next_term, day, time)    
+                    prereq_in_current_term = CourseAssigned(prerequisite, room, current_term, day, time, variables[(prerequisite, current_term, room, day, time)])
+                    course_in_next_term = CourseAssigned(course, room, next_term, day, time, variables[(course, next_term, room, day, time)]) 
 
                     E.add_constraint(prereq_in_current_term & course_in_next_term)
 
@@ -177,6 +89,12 @@ def schedule_programs():
     #         constraint.add_at_least_one(E, assignments_T1)
     #         constraint.add_at_least_one(E, assignments_T2)
     
+    # Organize the propositions into a dictionary by course and term
+    course_term_to_props = defaultdict(list)
+    for prop in course_assigned_props:
+        course_term_to_props[(prop.course, prop.term)].append(prop)
+
+    print("COURESS: ", course_term_to_props)
     # Ensure that there are 2 lectures per course
     for course in tqdm(COURSES.keys(), desc="Adding course constraints (3/3)"):
         for term in TERMS:
@@ -291,10 +209,10 @@ if __name__ == "__main__":
     print("OPs: ", T.size())
     
     solution = T.solve()
-    print("Solution: ")
+    print("Solution: ", solution)
     if solution:
         display_solution(solution)
 
-    print()
+    # print()
 
 
