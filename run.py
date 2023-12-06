@@ -7,7 +7,7 @@ from bauhaus import Encoding, proposition, constraint, Or, And
 from bauhaus.utils import count_solutions, likelihood
 from propositions import *
 from nnf import config
-import pandas as pd
+from display import display_solution
 
 # Configure SAT backend
 config.sat_backend = "kissat"
@@ -76,90 +76,6 @@ def schedule_programs():
 
     return E
 
-
-# Function to transform the list of CourseAssigned instances into a DataFrame
-def create_schedule(assignments):
-    # Extract information into a list of dictionaries
-    data = [
-        {'Course': assign.course, 'Room': assign.room, 'Term': assign.term, 
-         'Day': assign.day, 'Time': assign.time}
-        for assign in assignments
-    ]
-
-    # Create a DataFrame from the list of dictionaries
-    df = pd.DataFrame(data)
-
-    # Pivot the DataFrame to get the desired layout: index=time, columns=day, values=course
-    pivot_table = df.pivot_table(index=['Time', 'Term', 'Room'], columns='Day', values='Course', aggfunc=lambda x: ' / '.join(x))
-
-    return pivot_table
-
-# Function to generate HTML schedule from the pivot table
-def generate_html_schedule(pivot_table):
-    # Convert the pivot table to HTML
-    html = pivot_table.to_html(classes='schedule_table')
-
-    # Add custom styling
-    html_style = '''
-    <style>
-        .schedule_table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .schedule_table, .schedule_table th, .schedule_table td {
-            border: 1px solid black;
-        }
-        .schedule_table th, .schedule_table td {
-            padding: 5px;
-            text-align: center;
-        }
-        .schedule_table th {
-            background-color: #f2f2f2;
-        }
-        /* Additional styles can be added here */
-    </style>
-    '''
-
-    # Combine style and HTML
-    complete_html = f"<html><head>{html_style}</head><body>{html}</body></html>"
-
-    # Return the complete HTML
-    return complete_html
-
-
-def display_solution(solution):
-    print("SOLUTION Length:", len(solution))
-
-    # Filter out the propositions that are true in the solution
-    true_props = [prop for prop, value in solution.items() if value]
-
-    print("True Length: ", len(true_props))
-
-    print("True Props: ", true_props)
-
-    # Get the complete HTML for the schedule
-    complete_html_schedule = generate_html_schedule(create_schedule(true_props))
-
-    # Write the HTML to a file
-    with open('schedule.html', 'w') as file:
-        file.write(complete_html_schedule)
-
-    print("Schedule saved as HTML.")
-
-    
-    # # Sort the propositions by term, day, and time
-    # sorted_props = sorted(true_props, key=lambda prop: (TERMS.index(prop.term), DAYS.index(prop.day), TIMESLOTS.index(prop.time)))
-
-    # # Prepare the data for the table
-    # table_data = []
-    # for prop in sorted_props:
-    #     # professor = professor_by_time.get((prop.term, prop.day, prop.time), 'N/A')
-    #     table_data.append([prop.course, prop.room, prop.term, prop.day, prop.time])
-
-    # # Display the table
-    # print(tabulate(table_data, headers=["Course", "Classroom", "Term", "Day", "Time"]))
-
-
 if __name__ == "__main__":
     print("Building theory...")
     T = schedule_programs()
@@ -174,6 +90,4 @@ if __name__ == "__main__":
     # print("Solution: ", solution)
     if solution:
         display_solution(solution)
-
-    # print()
 
