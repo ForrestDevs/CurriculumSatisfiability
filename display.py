@@ -8,7 +8,6 @@ def combine_course_professor(course_assigned_props, professor_assigned_props):
     for course_assign in course_assigned_props:
         for prof_assign in professor_assigned_props:
             if (course_assign.course == prof_assign.course and
-                course_assign.room == prof_assign.room and
                 course_assign.term == prof_assign.term and
                 course_assign.day == prof_assign.day and
                 course_assign.time == prof_assign.time):
