@@ -38,14 +38,14 @@ def create_final_schedule(combined_info):
     df_term1 = df[df['Term'] == 'T-1']
     df_term2 = df[df['Term'] == 'T-2']
 
-    # Function to format the cell content
+    # Function to format the cell content with custom styling
     def format_cell(items):
-        return ' / '.join(items)
+        return ' / '.join([f'<div class="course-schedule">{item}</div>' for item in items])
 
-    # Create pivot tables for each term
-    pivot_table_term1 = df_term1.pivot_table(index=['Time', 'Room'], columns='Day', values='CourseRoom', 
+     # Create pivot tables for each term with corrected values field
+    pivot_table_term1 = df_term1.pivot_table(index=['Time', 'Room'], columns='Day', values='Course', 
                                              aggfunc=format_cell).fillna('')
-    pivot_table_term2 = df_term2.pivot_table(index=['Time', 'Room'], columns='Day', values='CourseRoom', 
+    pivot_table_term2 = df_term2.pivot_table(index=['Time', 'Room'], columns='Day', values='Course', 
                                              aggfunc=format_cell).fillna('')
 
     return pivot_table_term1, pivot_table_term2
