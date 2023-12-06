@@ -1,4 +1,5 @@
 import pandas as pd
+
 # Function to transform the list of CourseAssigned instances into a DataFrame
 def create_schedule(assignments):
     # Convert assignments to a DataFrame
@@ -7,7 +8,7 @@ def create_schedule(assignments):
             for assign in assignments]
     df = pd.DataFrame(data)
 
-     # Define the order for days and time slots
+    # Define the order for days and time slots
     day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
     time_order = sorted(set(df['Time']))  # Assuming df['Time'] contains all time slots
 
@@ -34,6 +35,18 @@ def create_schedule(assignments):
 
     return pivot_table_term1, pivot_table_term2
 
+# Function to transform the list of ProffesorAssigned instances into a DataFrame
+def create_schedule_with_professors(assignments):
+    # Convert assignments to a DataFrame
+    data = [{'Course': assign.course, 'Room': assign.room, 'Term': assign.term, 
+             'Day': assign.day, 'Time': assign.time, 'Professor': assign.professor}
+            for assign in assignments]
+    df = pd.DataFrame(data)
+
+    # Define the order for days and time slots
+    day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    time_order = sorted(set(df['Time']))  # Assuming df['Time'] contains all time slots
+    
 # Function to generate HTML schedule from the pivot table
 def generate_html_schedule(pivot_table_term1, pivot_table_term2):
     # Convert both pivot tables to HTML
@@ -81,8 +94,8 @@ def generate_html_schedule(pivot_table_term1, pivot_table_term2):
 
     return complete_html
 
-# Function to display the solution
-def display_solution(solution):
+# Function to display the course schedule
+def display_course_schedule(solution):
     print("SOLUTION Length:", len(solution))
 
     # Filter out the propositions that are true in the solution
@@ -102,3 +115,21 @@ def display_solution(solution):
         file.write(complete_html_schedule)
 
     print("Combined schedule saved as HTML.")
+
+# Function to display the final course schedule with professors
+def display_final_schedule(solution):
+    # Filter out the propositions that are true in the solution
+    true_props = [prop for prop, value in solution.items() if value]
+    print("True Length: ", len(true_props))
+
+    
+    # Create a schedule from the true propositions
+    schedule_pivot_table_term1, schedule_pivot_table_term2 = create_schedule(true_props)
+    # Usage
+    complete_html_schedule = generate_html_schedule(schedule_pivot_table_term1, schedule_pivot_table_term2)
+
+    # Write the HTML to a file
+    with open('final_schedule.html', 'w') as file:
+        file.write(complete_html_schedule)
+
+    print("Final schedule saved as HTML.")
