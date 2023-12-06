@@ -11,7 +11,7 @@ CLASSROOMS = [
 
 # List of days that lectures can be scheduled
 DAYS = [
-    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
+    "Monday", "Tuesday", "Wednesday"#, "Thursday", "Friday"
 ]
 
 # List of times that a lecture can be scheduled on
@@ -78,7 +78,7 @@ COURSES = {
     # 'CISC 102': {'credits': 3, 'reqs': ['']}, 
     # 'MATH 112': {'credits': 3, 'reqs': ['']}, 
     # 'MATH 111': {'credits': 6, 'reqs': ['']}, 
-    'MATH 110': {'credits': 6, 'reqs': ['']}, 
+    # 'MATH 110': {'credits': 6, 'reqs': ['']}, 
     'MATH 120': {'credits': 6, 'reqs': []}, 
     # 'MATH 121': {'credits': 6, 'reqs': []}, #
     # 'MATH 123': {'credits': 3, 'reqs': ['']}, 

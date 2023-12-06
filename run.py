@@ -27,14 +27,6 @@ for course, value in tqdm(COURSES.items(), desc="Adding course prerequisite prop
 
 
 def schedule_programs():
-    course_times_per_term = defaultdict(list)
-    for prop in course_assigned_props:
-          course_times_per_term[(prop.course, prop.term)].append(prop)
-    # Organize the propositions into a dictionary by course, day and term
-    course_times_per_day = defaultdict(list)
-    for prop in course_assigned_props:
-          course_times_per_day[(prop.course, prop.term, prop.day)].append(prop)
-    
     # Ensure that prerequisites are scheduled in a term before the course that requires them (IFF the course is the same level as the course that requires it)
     for prop in tqdm(course_prerequisite_props, desc="Adding course constraints (1/4)"):
             course = prop.course
