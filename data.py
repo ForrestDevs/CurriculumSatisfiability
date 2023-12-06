@@ -11,13 +11,13 @@ CLASSROOMS = [
 
 # List of days that lectures can be scheduled
 DAYS = [
-    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
+    "Monday", "Tuesday", "Wednesday", #"Thursday", "Friday"
 ]
 
 # List of times that a lecture can be scheduled on
 TIMESLOTS = [
     "8AM-930AM", "930AM-11AM", "11AM-1230PM", "1230PM-2PM",
-    "2PM-330PM", "330PM-5PM", "5PM-630PM", "630PM-8PM",
+    # "2PM-330PM", "330PM-5PM", "5PM-630PM", "630PM-8PM",
 ]
 # "8PM-930PM", "8AM-10AM", "10AM-12PM", "12PM-2PM", "2PM-4PM",
 #     "4PM-6PM", "6PM-8PM", "8:30AM-10AM", "10AM-11:30AM", "11:30AM-1PM", "1PM-2:30PM",
@@ -80,7 +80,7 @@ COURSES = {
     # 'MATH 111': {'credits': 6, 'reqs': ['']}, 
     'MATH 110': {'credits': 6, 'reqs': ['']}, 
     'MATH 120': {'credits': 6, 'reqs': []}, 
-    'MATH 121': {'credits': 6, 'reqs': []}, 
+    # 'MATH 121': {'credits': 6, 'reqs': []}, #
     # 'MATH 123': {'credits': 3, 'reqs': ['']}, 
     # 'MATH 124': {'credits': 3, 'reqs': ['']}, 
     # 'WRIT 125': {'credits': 3, 'reqs': ['']}, 
