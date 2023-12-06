@@ -1,0 +1,936 @@
+
+    <html>
+        <head>
+    <style>
+        .schedule_table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px; /* space between tables */
+        }
+        .schedule_table, .schedule_table th, .schedule_table td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .schedule_table th {
+            background-color: #f2f2f2;
+        }
+        .term-heading {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        /* Additional styles can be added here */
+    </style>
+    </head>
+        <body>
+            <div class="term-heading">Term 1 Schedule</div>
+            <table border="1" class="dataframe schedule_table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Day</th>
+      <th>Monday</th>
+      <th>Tuesday</th>
+      <th>Wednesday</th>
+      <th>Thursday</th>
+      <th>Friday</th>
+    </tr>
+    <tr>
+      <th>Time</th>
+      <th>Room</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="7" valign="top">11AM-1230PM</th>
+      <th>A1</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>CISC 121 (Room: A1)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td>MATH 112 (Room: A2)</td>
+      <td>MATH 121 (Room: A2)</td>
+      <td></td>
+      <td></td>
+      <td>CISC 226 (Room: A2)</td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td></td>
+      <td>PHIL 259 (Room: A3)</td>
+      <td>COGS 201 (Room: A3)</td>
+      <td>MATH 124 (Room: A3)</td>
+      <td>MATH 124 (Room: A3)</td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td>CISC 271 (Room: A4)</td>
+      <td></td>
+      <td></td>
+      <td>COGS 201 (Room: A4)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td>CISC 102 (Room: A5)</td>
+      <td></td>
+      <td></td>
+      <td>CISC 203 (Room: A5)</td>
+      <td>CISC 121 (Room: A5)</td>
+    </tr>
+    <tr>
+      <th>A6</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>WRIT 125 (Room: A6)</td>
+      <td>MATH 112 (Room: A6)</td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>COMM 200 (Room: A7)</td>
+      <td>MATH 121 (Room: A7)</td>
+    </tr>
+    <tr>
+      <th rowspan="7" valign="top">1230PM-2PM</th>
+      <th>A1</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>APSC 221 (Room: A1)</td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td>MATH 120 (Room: A2)</td>
+      <td></td>
+      <td>CISC 204 (Room: A2)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>CISC 102 (Room: A3)</td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td>APSC 221 (Room: A4)</td>
+      <td></td>
+      <td></td>
+      <td>COMM 251 (Room: A4)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td>COMM 251 (Room: A5)</td>
+      <td></td>
+      <td></td>
+      <td>MATH 110 (Room: A5)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A6</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>STAT 263 (Room: A6)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>CISC 271 (Room: A7)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th rowspan="6" valign="top">2PM-330PM</th>
+      <th>A1</th>
+      <td>CISC 204 (Room: A1)</td>
+      <td>COGS 201 (Room: A1)</td>
+      <td>COMM 200 (Room: A1)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td></td>
+      <td>WRIT 125 (Room: A3)</td>
+      <td>CISC 121 (Room: A3)</td>
+      <td>MATH 121 (Room: A3)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td>STAT 263 (Room: A4)</td>
+      <td></td>
+      <td>CISC 203 (Room: A4)</td>
+      <td>CISC 204 (Room: A4)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td></td>
+      <td>MATH 111 (Room: A5)</td>
+      <td>MATH 112 (Room: A5)</td>
+      <td></td>
+      <td>MATH 123 (Room: A5)</td>
+    </tr>
+    <tr>
+      <th>A6</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>MATH 111 (Room: A6)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td></td>
+      <td>MATH 110 (Room: A7)</td>
+      <td>WRIT 175 (Room: A7)</td>
+      <td>CISC 226 (Room: A7)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th rowspan="6" valign="top">330PM-5PM</th>
+      <th>A1</th>
+      <td></td>
+      <td>COMM 200 (Room: A1)</td>
+      <td></td>
+      <td></td>
+      <td>STAT 263 (Room: A1)</td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td></td>
+      <td>MATH 123 (Room: A3)</td>
+      <td></td>
+      <td></td>
+      <td>PHIL 259 (Room: A3)</td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td></td>
+      <td>APSC 221 (Room: A4)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td></td>
+      <td>MATH 124 (Room: A5)</td>
+      <td>APSC 221 (Room: A5)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A6</th>
+      <td>CISC 121 (Room: A6)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td></td>
+      <td></td>
+      <td>WRIT 125 (Room: A7)</td>
+      <td></td>
+      <td>MATH 111 (Room: A7)</td>
+    </tr>
+    <tr>
+      <th rowspan="7" valign="top">5PM-630PM</th>
+      <th>A1</th>
+      <td>COGS 201 (Room: A1)</td>
+      <td>CISC 204 (Room: A1)</td>
+      <td>CISC 226 (Room: A1)</td>
+      <td></td>
+      <td>CISC 203 (Room: A1)</td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td>WRIT 175 (Room: A2)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td></td>
+      <td></td>
+      <td>MATH 123 (Room: A3)</td>
+      <td>APSC 221 (Room: A3)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td></td>
+      <td>CISC 226 (Room: A4)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td></td>
+      <td></td>
+      <td>MATH 121 (Room: A5)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A6</th>
+      <td>MATH 110 (Room: A6)</td>
+      <td>COMM 251 (Room: A6)</td>
+      <td>MATH 110 (Room: A6)</td>
+      <td>CISC 102 (Room: A6)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td></td>
+      <td>MATH 120 (Room: A7)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th rowspan="6" valign="top">630PM-8PM</th>
+      <th>A1</th>
+      <td></td>
+      <td>CISC 203 (Room: A1)</td>
+      <td></td>
+      <td></td>
+      <td>COGS 201 (Room: A1)</td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td>CISC 226 (Room: A2)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>CISC 271 (Room: A2)</td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td></td>
+      <td>CISC 271 (Room: A3)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td>COMM 200 (Room: A5)</td>
+      <td></td>
+      <td>MATH 111 (Room: A5)</td>
+      <td></td>
+      <td>COMM 200 (Room: A5)</td>
+    </tr>
+    <tr>
+      <th>A6</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>MATH 112 (Room: A6)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td>MATH 111 (Room: A7)</td>
+      <td></td>
+      <td>MATH 124 (Room: A7)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th rowspan="7" valign="top">8AM-930AM</th>
+      <th>A1</th>
+      <td></td>
+      <td>CISC 102 (Room: A1)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>MATH 110 (Room: A2)</td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td>CISC 203 (Room: A3)</td>
+      <td></td>
+      <td></td>
+      <td>PHIL 259 (Room: A3)</td>
+      <td>WRIT 175 (Room: A3)</td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td>PHIL 259 (Room: A4)</td>
+      <td>STAT 263 (Room: A4)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td></td>
+      <td></td>
+      <td>STAT 263 (Room: A5)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A6</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>COMM 251 (Room: A6)</td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td></td>
+      <td>CISC 121 (Room: A7)</td>
+      <td></td>
+      <td></td>
+      <td>MATH 120 (Room: A7)</td>
+    </tr>
+    <tr>
+      <th rowspan="7" valign="top">930AM-11AM</th>
+      <th>A1</th>
+      <td></td>
+      <td></td>
+      <td>COMM 251 (Room: A1)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td></td>
+      <td></td>
+      <td>PHIL 259 (Room: A2)</td>
+      <td>MATH 120 (Room: A2)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td>MATH 124 (Room: A3)</td>
+      <td>WRIT 175 (Room: A3)</td>
+      <td></td>
+      <td>MATH 123 (Room: A3)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td>MATH 121 (Room: A4)</td>
+      <td></td>
+      <td>CISC 102 (Room: A4)</td>
+      <td></td>
+      <td>WRIT 125 (Room: A4)</td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td></td>
+      <td>MATH 112 (Room: A5)</td>
+      <td>CISC 271 (Room: A5)</td>
+      <td>WRIT 175 (Room: A5)</td>
+      <td>CISC 204 (Room: A5)</td>
+    </tr>
+    <tr>
+      <th>A6</th>
+      <td>MATH 123 (Room: A6)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td>WRIT 125 (Room: A7)</td>
+      <td></td>
+      <td>MATH 120 (Room: A7)</td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+            <div class="term-heading">Term 2 Schedule</div>
+            <table border="1" class="dataframe schedule_table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Day</th>
+      <th>Monday</th>
+      <th>Tuesday</th>
+      <th>Wednesday</th>
+      <th>Thursday</th>
+      <th>Friday</th>
+    </tr>
+    <tr>
+      <th>Time</th>
+      <th>Room</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="7" valign="top">11AM-1230PM</th>
+      <th>A1</th>
+      <td>MATH 111 (Room: A1)</td>
+      <td></td>
+      <td>PHIL 259 (Room: A1)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td></td>
+      <td>WRIT 125 (Room: A2)</td>
+      <td>COMM 251 (Room: A2)</td>
+      <td></td>
+      <td>CISC 102 (Room: A2)</td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td>MATH 123 (Room: A3)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td>COMM 200 (Room: A4)</td>
+      <td>WRIT 175 (Room: A4)</td>
+      <td></td>
+      <td>CISC 124 (Room: A4)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td>MATH 124 (Room: A5)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>COGS 201 (Room: A5)</td>
+    </tr>
+    <tr>
+      <th>A6</th>
+      <td></td>
+      <td>MATH 123 (Room: A6)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td>WRIT 175 (Room: A7)</td>
+      <td></td>
+      <td>MATH 111 (Room: A7)</td>
+      <td>CISC 203 (Room: A7)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th rowspan="7" valign="top">1230PM-2PM</th>
+      <th>A1</th>
+      <td></td>
+      <td>MATH 120 (Room: A1)</td>
+      <td></td>
+      <td>MATH 121 (Room: A1)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td></td>
+      <td>COMM 251 (Room: A2)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td>MATH 121 (Room: A3)</td>
+      <td></td>
+      <td></td>
+      <td>MATH 112 (Room: A3)</td>
+      <td>CISC 226 (Room: A3)</td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td></td>
+      <td></td>
+      <td>MATH 112 (Room: A4)</td>
+      <td>COMM 251 (Room: A4)</td>
+      <td>WRIT 125 (Room: A4)</td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td></td>
+      <td>CISC 204 (Room: A5)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A6</th>
+      <td>STAT 263 (Room: A6)</td>
+      <td></td>
+      <td>MATH 121 (Room: A6)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td>CISC 204 (Room: A7)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th rowspan="7" valign="top">2PM-330PM</th>
+      <th>A1</th>
+      <td></td>
+      <td></td>
+      <td>CISC 204 (Room: A1)</td>
+      <td>MATH 111 (Room: A1)</td>
+      <td>MATH 120 (Room: A1)</td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td>MATH 120 (Room: A2)</td>
+      <td></td>
+      <td>CISC 102 (Room: A2)</td>
+      <td></td>
+      <td>APSC 221 (Room: A2)</td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td></td>
+      <td></td>
+      <td>MATH 110 (Room: A3)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td></td>
+      <td>MATH 124 (Room: A4)</td>
+      <td></td>
+      <td>MATH 110 (Room: A4)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td></td>
+      <td>PHIL 259 (Room: A5)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A6</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>MATH 124 (Room: A6)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td>CISC 271 (Room: A7)</td>
+      <td></td>
+      <td>MATH 123 (Room: A7)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th rowspan="7" valign="top">330PM-5PM</th>
+      <th>A1</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>COMM 200 (Room: A1)</td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>WRIT 125 (Room: A2)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td></td>
+      <td></td>
+      <td>COMM 200 (Room: A3)</td>
+      <td>STAT 263 (Room: A3)</td>
+      <td>MATH 111 (Room: A3)</td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td></td>
+      <td>COGS 201 (Room: A4)</td>
+      <td>WRIT 125 (Room: A4)</td>
+      <td>MATH 123 (Room: A4)</td>
+      <td>WRIT 175 (Room: A4)</td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>APSC 221 (Room: A5)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A6</th>
+      <td>COMM 251 (Room: A6)</td>
+      <td></td>
+      <td>CISC 226 (Room: A6)</td>
+      <td>CISC 271 (Room: A6)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td></td>
+      <td>APSC 221 (Room: A7)</td>
+      <td>MATH 124 (Room: A7)</td>
+      <td></td>
+      <td>MATH 110 (Room: A7)</td>
+    </tr>
+    <tr>
+      <th rowspan="7" valign="top">5PM-630PM</th>
+      <th>A1</th>
+      <td>APSC 221 (Room: A1)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>CISC 203 (Room: A1)</td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td></td>
+      <td></td>
+      <td>STAT 263 (Room: A2)</td>
+      <td>MATH 120 (Room: A2)</td>
+      <td>MATH 121 (Room: A2)</td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td>CISC 102 (Room: A3)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>MATH 112 (Room: A3)</td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td></td>
+      <td></td>
+      <td>CISC 124 (Room: A4)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>CISC 124 (Room: A5)</td>
+    </tr>
+    <tr>
+      <th>A6</th>
+      <td></td>
+      <td></td>
+      <td>CISC 271 (Room: A6)</td>
+      <td></td>
+      <td>MATH 124 (Room: A6)</td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td></td>
+      <td>COMM 200 (Room: A7)</td>
+      <td></td>
+      <td>PHIL 259 (Room: A7)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th rowspan="5" valign="top">630PM-8PM</th>
+      <th>A1</th>
+      <td></td>
+      <td>CISC 271 (Room: A1)</td>
+      <td></td>
+      <td>WRIT 175 (Room: A1)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td></td>
+      <td>MATH 111 (Room: A2)</td>
+      <td>APSC 221 (Room: A2)</td>
+      <td></td>
+      <td>PHIL 259 (Room: A2)</td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td>CISC 203 (Room: A5)</td>
+      <td>STAT 263 (Room: A5)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A6</th>
+      <td>CISC 124 (Room: A6)</td>
+      <td></td>
+      <td></td>
+      <td>CISC 102 (Room: A6)</td>
+      <td>CISC 271 (Room: A6)</td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td></td>
+      <td></td>
+      <td>CISC 203 (Room: A7)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th rowspan="6" valign="top">8AM-930AM</th>
+      <th>A1</th>
+      <td></td>
+      <td></td>
+      <td>COGS 201 (Room: A1)</td>
+      <td></td>
+      <td>MATH 123 (Room: A1)</td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td></td>
+      <td></td>
+      <td>MATH 120 (Room: A2)</td>
+      <td>COGS 201 (Room: A2)</td>
+      <td>STAT 263 (Room: A2)</td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td></td>
+      <td>MATH 121 (Room: A3)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td></td>
+      <td>CISC 203 (Room: A4)</td>
+      <td></td>
+      <td>COMM 200 (Room: A4)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td></td>
+      <td>CISC 102 (Room: A5)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td>MATH 110 (Room: A7)</td>
+      <td>CISC 226 (Room: A7)</td>
+      <td></td>
+      <td>CISC 204 (Room: A7)</td>
+      <td>COMM 251 (Room: A7)</td>
+    </tr>
+    <tr>
+      <th rowspan="6" valign="top">930AM-11AM</th>
+      <th>A1</th>
+      <td>PHIL 259 (Room: A1)</td>
+      <td>CISC 124 (Room: A1)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td>COGS 201 (Room: A3)</td>
+      <td>MATH 112 (Room: A3)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td>MATH 112 (Room: A4)</td>
+      <td></td>
+      <td></td>
+      <td>CISC 226 (Room: A4)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td></td>
+      <td>MATH 110 (Room: A5)</td>
+      <td>WRIT 175 (Room: A5)</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A6</th>
+      <td>WRIT 125 (Room: A6)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A7</th>
+      <td>CISC 226 (Room: A7)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>CISC 204 (Room: A7)</td>
+    </tr>
+  </tbody>
+</table>
+        </body>
+    </html>
+    

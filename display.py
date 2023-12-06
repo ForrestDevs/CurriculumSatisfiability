@@ -1,17 +1,145 @@
-# Sample schedule data
-schedule_data = [
-    {'time': '9:00', 'Monday': 'Intro + Types', 'Tuesday': 'Review', 'Wednesday': 'Review', 'Thursday': '', 'Friday': 'Review'},
-    {'time': '9:00', 'Monday': 'Intro + Types', 'Tuesday': 'Review', 'Wednesday': 'Review', 'Thursday': '', 'Friday': 'Review'},
-    {'time': '9:00', 'Monday': 'Intro + Types', 'Tuesday': 'Review', 'Wednesday': 'Review', 'Thursday': '', 'Friday': 'Review'},
-    {'time': '9:00', 'Monday': 'Intro + Types', 'Tuesday': 'Review', 'Wednesday': 'Review', 'Thursday': '', 'Friday': 'Review'},
-    {'time': '9:00', 'Monday': 'Intro + Types', 'Tuesday': 'Review', 'Wednesday': 'Review', 'Thursday': '', 'Friday': 'Review'},
-    {'time': '9:00', 'Monday': 'Intro + Types', 'Tuesday': 'Review', 'Wednesday': 'Review', 'Thursday': '', 'Friday': 'Review'},
-    {'time': '9:00', 'Monday': 'Intro + Types', 'Tuesday': 'Review', 'Wednesday': 'Review', 'Thursday': '', 'Friday': 'Review'},
-    {'time': '9:00', 'Monday': 'Intro + Types', 'Tuesday': 'Review', 'Wednesday': 'Review', 'Thursday': '', 'Friday': 'Review'},
-    {'time': '10:00', 'Monday': 'Intro + Types', 'Tuesday': 'Review', 'Wednesday': 'Review', 'Thursday': '', 'Friday': 'Review'}
+import pandas as pd
+
+# Function to transform the list of CourseAssigned instances into a DataFrame
+def create_pivot(assignments):
+    # Extract information into a list of dictionaries
+    data = [
+        {'Course': assign.course, 'Room': assign.room, 'Term': assign.term, 
+         'Day': assign.day, 'Time': assign.time}
+        for assign in assignments
+    ]
+
+    # Create a DataFrame from the list of dictionaries
+    df = pd.DataFrame(data)
+
+    # Pivot the DataFrame to get the desired layout: index=time, columns=day, values=course
+    pivot_table = df.pivot_table(index=['Time', 'Term', 'Room'], columns='Day', values='Course', aggfunc=lambda x: ' / '.join(x))
+
+    return pivot_table
+
+def create_twoterm_pivot(assignments):
+    # Extract information into a list of dictionaries
+    data = [
+        {'Course': assign.course, 'Room': assign.room, 'Term': assign.term, 
+         'Day': assign.day, 'Time': assign.time}
+        for assign in assignments
+    ]
+
+    # Create a DataFrame from the list of dictionaries
+    df = pd.DataFrame(data)
+
+    # Separate data for each term
+    df_term1 = df[df['Term'] == 'T-1']
+    df_term2 = df[df['Term'] == 'T-2']
+
+    # Create pivot tables for each term
+    pivot_table_term1 = df_term1.pivot_table(index=['Time', 'Room'], columns='Day', values='Course', aggfunc=lambda x: ' / '.join(x)).fillna('')
+    pivot_table_term2 = df_term2.pivot_table(index=['Time', 'Room'], columns='Day', values='Course', aggfunc=lambda x: ' / '.join(x)).fillna('')
+
+    return pivot_table_term1, pivot_table_term2
+
+
+def create_schedule(assignments):
+    # Extract information into a list of dictionaries
+    data = [
+        {'Course': assign.course, 'Room': assign.room, 'Term': assign.term, 
+         'Day': assign.day, 'Time': assign.time, 'Professor': assign.professor}
+        for assign in assignments
+    ]
+
+    # Create a DataFrame from the list of dictionaries
+    df = pd.DataFrame(data)
+
+    # Define the order for days and time slots
+    day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    time_order = sorted(set(df['Time']))  # Assuming df['Time'] contains all time slots
     
-    # ... additional time slots
-]
+    # Separate data for each term
+    df_term1 = df[df['Term'] == 'T-1']
+    df_term2 = df[df['Term'] == 'T-2']
+
+    # HTML template for a course block
+    course_block_template = '''
+    <div class="course-block">
+        <strong>{course_code}</strong><br>
+        Room: {room}<br>
+        Prof: {professor}
+    </div>
+    '''
+
+    # Function to format the cell content
+    def format_cell(x):
+        return ' / '.join([course_block_template.format(course_code=item['Course'], 
+                                                        room=item['Room'], 
+                                                        professor=item['Professor']) 
+                           for item in x])
+
+    # Create pivot tables for each term
+    pivot_table_term1 = df_term1.pivot_table(index=['Time', 'Room'], columns='Day', values=['Course', 'Room', 'Professor'], 
+                                             aggfunc=lambda x: format_cell(x.dropna().to_dict('records'))).fillna('')
+    pivot_table_term2 = df_term2.pivot_table(index=['Time', 'Room'], columns='Day', values=['Course', 'Room', 'Professor'], 
+                                             aggfunc=lambda x: format_cell(x.dropna().to_dict('records'))).fillna('')
+
+    return pivot_table_term1, pivot_table_term2
+
+
+def generate_html_schedule(pivot_table_term1, pivot_table_term2):
+    # Convert both pivot tables to HTML
+    html_term1 = pivot_table_term1.to_html(classes='schedule_table', escape=False)
+    html_term2 = pivot_table_term2.to_html(classes='schedule_table', escape=False)
+
+    # Add custom styling
+    html_style = '''
+    <style>
+        .schedule_table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px; /* space between tables */
+        }
+        .schedule_table, .schedule_table th, .schedule_table td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .schedule_table th {
+            background-color: #f2f2f2;
+        }
+        .term-heading {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        /* Additional styles can be added here */
+    </style>
+    '''
+
+    # Combine style and HTML for both terms
+    complete_html = f'''
+    <html>
+        <head>{html_style}</head>
+        <body>
+            <div class="term-heading">Term 1 Schedule</div>
+            {html_term1}
+            <div class="term-heading">Term 2 Schedule</div>
+            {html_term2}
+        </body>
+    </html>
+    '''
+
+    # Return the complete HTML
+    return complete_html
+
+# Usage
+complete_html_schedule = generate_html_schedule(schedule_pivot_table_term1, schedule_pivot_table_term2)
+
+# Write the HTML to a file
+with open('combined_schedule.html', 'w') as file:
+    file.write(complete_html_schedule)
+
+print("Combined schedule saved as HTML.")
+
+
 
 # Start of the HTML string
 html_string = """
