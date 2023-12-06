@@ -25,6 +25,7 @@ for course, value in tqdm(COURSES.items(), desc="Adding course prerequisite prop
         for prerequisite in value['reqs']:
                 course_prerequisite_props.append(CoursePrerequisite(course, prerequisite))
 
+
 def schedule_programs():
     course_times_per_term = defaultdict(list)
     for prop in course_assigned_props:

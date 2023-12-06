@@ -11,7 +11,7 @@ CLASSROOMS = [
 
 # List of days that lectures can be scheduled
 DAYS = [
-    "Monday", "Tuesday", "Wednesday", #"Thursday", "Friday"
+    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
 ]
 
 # List of times that a lecture can be scheduled on
