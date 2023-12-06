@@ -1,4 +1,4 @@
-from bauhaus import Encoding, proposition
+from bauhaus import Encoding, proposition, constraint
 
 E = Encoding()
 
@@ -46,6 +46,18 @@ class CourseAssigned(Hashable):
 
     def __repr__(self) -> str:
         return f"CourseAssigned(course={self.course}, room={self.room}, term={self.term}, day={self.day}, time={self.time})"
+
+# Course Props:
+@proposition(E)
+@constraint.at_most_k(E, 2)
+class CourseLectures(Hashable):
+    def __init__(self, course_one, course_two) -> None:
+        self.course_one = course_one
+        self.course_two = course_two
+
+
+    def __repr__(self) -> str:
+        return f"CourseLectures(course_one={self.course_one}, course_two={self.course_two})"
 
 @proposition(E)
 class CoursePrerequisite(Hashable):
