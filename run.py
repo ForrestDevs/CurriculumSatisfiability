@@ -54,37 +54,18 @@ def schedule_programs():
           course_times_per_day[(prop.course, prop.term, prop.day)].append(prop)
 
     # Ensure that there is at most 1 lecture for a course per term per day
-    for daily_times in tqdm(  course_times_per_day.values(), desc="Adding course constraints (2/3)"):
-        # print(daily_times)
-
+    for daily_times in tqdm(course_times_per_day.values(), desc="Adding course constraints (2/3)"):
         constraint.add_at_most_one(E, daily_times)
 
-    course_times_per_term = defaultdict(list)
+    # Organize the propositions into a dictionary by day, term, time, and classroom
+    room_bookings = defaultdict(list)
     for prop in course_assigned_props:
-          course_times_per_term[(prop.course, prop.term)].append(prop)
-
-    # Ensure that there are 2 lectures per course per term 
-    for course in COURSES:
-        # Create all possible propositions for this course
-        all_assignments = [CourseAssigned(course, room, term, day, time) 
-                        for room in CLASSROOMS 
-                        for term in TERMS 
-                        for day in DAYS 
-                        for time in TIMESLOTS]
-
-        # Add constraints to ensure at least three are true
-        for combo in combinations(all_assignments, 3):
-            constraint.add_at_least_one(E, list(combo))
-
-        # Add constraints to ensure no more than three are true
-        # For each combination of four, at least one must be false
-        for combo in combinations(all_assignments, 4):
-            # Create a constraint that at least one in this combo is false
-            not_all_true_constraint = Or(*[~c for c in combo])
-            E.add_constraint(not_all_true_constraint)
+          room_bookings[(prop.time, prop.term, prop.day, prop.room)].append(prop)
 
     # Ensure there are no classroom conflicts
-    # for 
+    for booked_room in tqdm(room_bookings.values(), desc="Adding course constraints (3/3)"):
+        constraint.add_at_most_one(E, booked_room)
+
     return E
 
 
@@ -104,8 +85,6 @@ def create_schedule(assignments):
     pivot_table = df.pivot_table(index=['Time', 'Term', 'Room'], columns='Day', values='Course', aggfunc=lambda x: ' / '.join(x))
 
     return pivot_table
-
-# Assuming schedule_pivot_table is the pivot table you have already generated
 
 # Function to generate HTML schedule from the pivot table
 def generate_html_schedule(pivot_table):
