@@ -32,18 +32,10 @@ def schedule_programs():
             prerequisite_level = int(prerequisite.split()[1][0])  # Extract the course level from the prerequisite code
 
             if course_level == prerequisite_level:  # Check if the course level matches the prerequisite level
-                for room, day in product(CLASSROOMS, DAYS):
-                    # Propositions for the prerequisite course in Term 1
-                    prereq_in_term1 = [CourseAssigned(prerequisite, room, "T-2", day, time) for time in TIMESLOTS]
-                    # Propositions for the course in Term 2
-                    course_in_term2 = [CourseAssigned(course, room, "T-1", day, time) for time in TIMESLOTS]
-
-                    # Add the implies constraint for each timeslot
-                    for course_time in course_in_term2:
-                            E.add_constraint(~course_time)
-
-                    for course_time in prereq_in_term1:
-                            E.add_constraint(~course_time)
+                prereq_in_prev_term = [CourseAssigned(prerequisite, room, "T-1", day, time) for room in CLASSROOMS for day in DAYS for time in TIMESLOTS]
+                course_in_next_term = [CourseAssigned(course, room, "T-2", day, time) for room in CLASSROOMS for day in DAYS for time in TIMESLOTS]
+                # Add constraint for the entire term, not each room and day
+                constraint.add_implies_all(E, course_in_next_term, prereq_in_prev_term)
     # Organize the propositions into a dictionary by course, day and term
     course_times_per_day = defaultdict(list)
     for prop in course_assigned_props:

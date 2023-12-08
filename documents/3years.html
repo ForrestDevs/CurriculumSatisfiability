@@ -1,0 +1,313 @@
+
+    <html>
+        <head>
+    <style>
+        .schedule_table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px; /* space between tables */
+        }
+        .schedule_table, .schedule_table th, .schedule_table td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .schedule_table th {
+            background-color: #f2f2f2;
+        }
+        .term-heading {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .course-schedule {
+            background-color: grey;
+            padding: 5px;
+            margin: 5px;
+            display: inline-block; /* For multiple blocks in the same cell */
+        }
+    </style>
+    </head>
+        <body>
+            <div class="term-heading">Term 1 Schedule</div>
+            <table border="1" class="dataframe schedule_table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Day</th>
+      <th>Monday</th>
+      <th>Tuesday</th>
+      <th>Wednesday</th>
+    </tr>
+    <tr>
+      <th>Time</th>
+      <th>Room</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">11am-12:30pm</th>
+      <th>A1</th>
+      <td></td>
+      <td><div class="course-schedule">CISC 335 (Prof: P1)</div></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td><div class="course-schedule">CISC 204 (Prof: P3)</div></td>
+      <td><div class="course-schedule">CISC 327 (Prof: P8)</div></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td><div class="course-schedule">CISC 326 (Prof: P9)</div></td>
+      <td><div class="course-schedule">MATH 121 (Prof: P11)</div></td>
+      <td><div class="course-schedule">CISC 235 (Prof: P7)</div></td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td><div class="course-schedule">PHIL 259 (Prof: P4)</div></td>
+      <td><div class="course-schedule">CISC 324 (Prof: P9)</div></td>
+      <td><div class="course-schedule">CISC 221 (Prof: P2)</div></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td><div class="course-schedule">MATH 121 (Prof: P11)</div></td>
+      <td><div class="course-schedule">MATH 110 (Prof: P10)</div></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">12:30-2pm</th>
+      <th>A2</th>
+      <td><div class="course-schedule">CISC 324 (Prof: P9)</div></td>
+      <td><div class="course-schedule">CISC 365 (Prof: P8)</div></td>
+      <td><div class="course-schedule">CISC 365 (Prof: P8)</div></td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td></td>
+      <td><div class="course-schedule">CISC 102 (Prof: P6)</div></td>
+      <td><div class="course-schedule">MATH 111 (Prof: P2)</div></td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td><div class="course-schedule">CISC 223 (Prof: P3)</div></td>
+      <td><div class="course-schedule">CISC 326 (Prof: P9)</div></td>
+      <td><div class="course-schedule">MATH 110 (Prof: P10)</div></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td><div class="course-schedule">CISC 235 (Prof: P7)</div></td>
+      <td><div class="course-schedule">COMM 200 (Prof: P5)</div></td>
+      <td><div class="course-schedule">CISC 360 (Prof: P6)</div></td>
+    </tr>
+    <tr>
+      <th rowspan="5" valign="top">8-9:30am</th>
+      <th>A1</th>
+      <td></td>
+      <td><div class="course-schedule">CISC 220 (Prof: P7)</div></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td><div class="course-schedule">CISC 121 (Prof: P1)</div></td>
+      <td><div class="course-schedule">CISC 203 (Prof: P10)</div></td>
+      <td><div class="course-schedule">CISC 102 (Prof: P6)</div></td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td><div class="course-schedule">CISC 124 (Prof: P4)</div></td>
+      <td><div class="course-schedule">PHIL 259 (Prof: P4)</div></td>
+      <td><div class="course-schedule">CISC 325 (Prof: P11)</div></td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td><div class="course-schedule">CISC 325 (Prof: P11)</div></td>
+      <td><div class="course-schedule">MATH 112 (Prof: P12)</div></td>
+      <td><div class="course-schedule">CISC 335 (Prof: P1)</div></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td><div class="course-schedule">COMM 200 (Prof: P5)</div></td>
+      <td><div class="course-schedule">CISC 360 (Prof: P6)</div></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th rowspan="5" valign="top">9:30-11am</th>
+      <th>A1</th>
+      <td><div class="course-schedule">CISC 221 (Prof: P2)</div></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td></td>
+      <td><div class="course-schedule">CISC 124 (Prof: P4)</div></td>
+      <td><div class="course-schedule">CISC 322 (Prof: P5)</div></td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td><div class="course-schedule">MATH 120 (Prof: P12)</div></td>
+      <td><div class="course-schedule">MATH 120 (Prof: P12)</div></td>
+      <td><div class="course-schedule">CISC 121 (Prof: P1)</div></td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td><div class="course-schedule">CISC 327 (Prof: P8)</div></td>
+      <td><div class="course-schedule">CISC 223 (Prof: P3)</div></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td></td>
+      <td><div class="course-schedule">MATH 111 (Prof: P2)</div></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+            <div class="term-heading">Term 2 Schedule</div>
+            <table border="1" class="dataframe schedule_table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Day</th>
+      <th>Monday</th>
+      <th>Tuesday</th>
+      <th>Wednesday</th>
+    </tr>
+    <tr>
+      <th>Time</th>
+      <th>Room</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">11am-12:30pm</th>
+      <th>A1</th>
+      <td><div class="course-schedule">MATH 121 (Prof: P11)</div></td>
+      <td></td>
+      <td><div class="course-schedule">CISC 220 (Prof: P7)</div></td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td></td>
+      <td><div class="course-schedule">CISC 221 (Prof: P2)</div></td>
+      <td><div class="course-schedule">MATH 120 (Prof: P12)</div></td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td></td>
+      <td></td>
+      <td><div class="course-schedule">CISC 327 (Prof: P8)</div></td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td><div class="course-schedule">MATH 111 (Prof: P2)</div></td>
+      <td><div class="course-schedule">PHIL 259 (Prof: P4)</div></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td><div class="course-schedule">CISC 327 (Prof: P8)</div></td>
+      <td><div class="course-schedule">CISC 324 (Prof: P9)</div></td>
+      <td><div class="course-schedule">CISC 121 (Prof: P1)</div></td>
+    </tr>
+    <tr>
+      <th rowspan="5" valign="top">12:30-2pm</th>
+      <th>A1</th>
+      <td><div class="course-schedule">PHIL 259 (Prof: P4)</div></td>
+      <td><div class="course-schedule">CISC 322 (Prof: P5)</div></td>
+      <td><div class="course-schedule">MATH 112 (Prof: P12)</div></td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td><div class="course-schedule">COMM 200 (Prof: P5)</div></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td></td>
+      <td></td>
+      <td><div class="course-schedule">MATH 111 (Prof: P2)</div></td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td><div class="course-schedule">MATH 110 (Prof: P10)</div></td>
+      <td><div class="course-schedule">CISC 220 (Prof: P7)</div></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td><div class="course-schedule">CISC 121 (Prof: P1)</div></td>
+      <td><div class="course-schedule">MATH 112 (Prof: P12)</div></td>
+      <td><div class="course-schedule">COMM 200 (Prof: P5)</div></td>
+    </tr>
+    <tr>
+      <th rowspan="5" valign="top">8-9:30am</th>
+      <th>A1</th>
+      <td><div class="course-schedule">CISC 102 (Prof: P6)</div></td>
+      <td><div class="course-schedule">CISC 365 (Prof: P8)</div></td>
+      <td><div class="course-schedule">CISC 322 (Prof: P5)</div></td>
+    </tr>
+    <tr>
+      <th>A2</th>
+      <td></td>
+      <td><div class="course-schedule">MATH 121 (Prof: P11)</div></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td><div class="course-schedule">CISC 325 (Prof: P11)</div></td>
+      <td><div class="course-schedule">CISC 203 (Prof: P10)</div></td>
+      <td><div class="course-schedule">CISC 326 (Prof: P9)</div></td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td></td>
+      <td><div class="course-schedule">CISC 204 (Prof: P3)</div></td>
+      <td><div class="course-schedule">CISC 360 (Prof: P6)</div></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td><div class="course-schedule">CISC 365 (Prof: P8)</div></td>
+      <td><div class="course-schedule">MATH 120 (Prof: P12)</div></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">9:30-11am</th>
+      <th>A1</th>
+      <td><div class="course-schedule">CISC 221 (Prof: P2)</div></td>
+      <td><div class="course-schedule">MATH 110 (Prof: P10)</div></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>A3</th>
+      <td></td>
+      <td><div class="course-schedule">CISC 360 (Prof: P6)</div></td>
+      <td><div class="course-schedule">CISC 325 (Prof: P11)</div></td>
+    </tr>
+    <tr>
+      <th>A4</th>
+      <td><div class="course-schedule">CISC 203 (Prof: P10)</div></td>
+      <td></td>
+      <td><div class="course-schedule">CISC 204 (Prof: P3)</div></td>
+    </tr>
+    <tr>
+      <th>A5</th>
+      <td><div class="course-schedule">CISC 326 (Prof: P9)</div></td>
+      <td></td>
+      <td><div class="course-schedule">CISC 102 (Prof: P6)</div></td>
+    </tr>
+  </tbody>
+</table>
+        </body>
+    </html>
+    
