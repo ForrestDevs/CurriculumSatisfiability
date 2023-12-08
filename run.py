@@ -120,7 +120,3 @@ if __name__ == "__main__":
             display_final_schedule(course_schedule, professor_schedule)
     else: 
         print("No solution found, ending program.")
-
-    
-
-
